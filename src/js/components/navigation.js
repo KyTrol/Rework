@@ -7,7 +7,7 @@ export const bindIcons = () => {
   const icons = getElementByClass('menu').getElementsByClassName('icon-wrap');
 
   for (let i = 0; i < icons.length; i++) {
-    icons[i].onclick = _ => {
+    icons[i].onclick = () => {
       const sectionName = getSectionName(icons[i].id);
 
       // Scroll window to top of section
@@ -25,7 +25,7 @@ const scrollToSection = targetId => {
   const startPos = window.pageYOffset;
   const startTime = window.performance.now();
   const endPos = document.getElementById(targetId).offsetTop;
-  let distance = endPos - startPos;
+  const distance = endPos - startPos;
   const scrollingUp = distance < 0;
 
   window.requestAnimationFrame(animateScroll);

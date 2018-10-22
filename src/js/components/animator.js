@@ -2,7 +2,7 @@ import {
   addClass, dropClass, hasClass,
   getElementByClass, getSectionInViewport,
   getSectionName
- } from './ele-util';
+} from './ele-util';
 
 /**
  * Slides arrow to current section in view.

@@ -11,6 +11,7 @@ export default {
     inline: true,
     port: 3001
   },
+  mode: 'development',
   output: {
     publicPath: '/'
   },
@@ -32,7 +33,6 @@ export default {
     }]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin()
+    new webpack.HotModuleReplacementPlugin()
   ]
 };

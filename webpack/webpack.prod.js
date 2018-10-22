@@ -1,57 +1,43 @@
-import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import StyleExtHtmlWebpackPlugin from 'style-ext-html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import autoprefixer from 'autoprefixer';
 import { paths } from './util';
-
-const critCssPath = paths.css('critical');
-
-const criticalCss = new ExtractTextPlugin(critCssPath);
-const externalCss = new ExtractTextPlugin(paths.css('bundle'));
-
-const cssLoaderOpts = {
-  use: [{
-    loader: 'css-loader?minimize'
-  },
-  {
-    loader: 'postcss-loader',
-    options: {
-      plugins: [autoprefixer()]
-    }
-  },
-  {
-    loader: 'sass-loader'
-  }]
-};
 
 export default {
   output: {
     publicPath: paths.public
   },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true
+      }),
+      new OptimizeCSSAssetsPlugin()
+    ]
+  },
+  mode: 'production',
   module: {
     rules: [{
-      test: /critical\.scss/,
+      test: /\.scss$/,
       exclude: /node_modules/,
-      use: criticalCss.extract(cssLoaderOpts)
-    },
-    {
-      test: /styles\.scss/,
-      exclude: /node_modules/,
-      use: externalCss.extract(cssLoaderOpts)
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader',
+        {
+          loader: 'postcss-loader',
+          options: {
+            plugins: [autoprefixer()]
+          }
+        },
+        'sass-loader'
+      ]
     }]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        drop_console: true,
-        warnings: false
-      },
-      output: {
-        comments: false
-      }
-    }),
-    criticalCss,
-    externalCss,
-    new StyleExtHtmlWebpackPlugin(critCssPath)
+    new MiniCssExtractPlugin({
+      filename: paths.css('bundle')
+    })
   ]
 };

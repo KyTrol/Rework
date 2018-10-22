@@ -1,5 +1,6 @@
 import path from 'path';
 import webpack from 'webpack';
+import CleanWebpackPlugin from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
@@ -164,6 +165,10 @@ export default env => {
           yandex: false,
           windows: false
         }
+      }),
+      new CleanWebpackPlugin('build', {
+        root: paths.root,
+        allowExternals: true
       })
     ]
   };
